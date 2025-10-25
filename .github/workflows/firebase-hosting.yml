@@ -15,7 +15,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name of: Set up Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '18'
@@ -27,7 +27,7 @@ jobs:
         run: npm run build --prefix frontend
 
       - name: Deploy to Firebase Hosting on merge
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && secrets.FIREBASE_SERVICE_ACCOUNT_YOUR_PROJECT_NAME != ''
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
@@ -36,10 +36,10 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_YOUR_PROJECT_NAME }}'
           channelId: live
           # Replace 'your-project-id' with your Firebase project ID.
-          projectId: "project-management-is"
+          projectId: your-project-id
 
       - name: Deploy to Firebase Hosting on PR
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && secrets.FIREBASE_SERVICE_ACCOUNT_YOUR_PROJECT_NAME != ''
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
@@ -47,6 +47,6 @@ jobs:
           # This secret should contain the content of the Firebase service account JSON file.
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_YOUR_PROJECT_NAME }}'
           # Replace 'your-project-id' with your Firebase project ID.
-          projectId: "project-management-is"
+          projectId: your-project-id
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
